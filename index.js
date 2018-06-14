@@ -28,7 +28,9 @@ const whoisReferralRegExp = RegExp([
   '([^\\s]*)'
 ].join(''))
 
-export default async function easyWhois (addr, passedOptions = {}) {
+module.exports = easyWhois
+
+function easyWhois (addr, passedOptions = {}) {
   const options = Object.assign(
     {},
     DEFAULT_OPTIONS,
