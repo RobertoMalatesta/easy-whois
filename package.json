@@ -1,0 +1,22 @@
+{
+  "name": "easy-whois",
+  "version": "1.0.0",
+  "description": "Easy WHOIS clinet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsertkov/easy-whois.git"
+  },
+  "keywords": [
+    "whois"
+  ],
+  "author": "Aleksandr Tsertkov <tsertkov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tsertkov/easy-whois/issues"
+  },
+  "homepage": "https://github.com/tsertkov/easy-whois#readme"
+}
