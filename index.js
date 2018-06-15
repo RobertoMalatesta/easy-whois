@@ -42,12 +42,12 @@ function easyWhois (addr, passedOptions = {}) {
       options,
       getWhoisServerOptionsForAddr(addr)
     )
+  } else {
+    Object.assign(
+      options,
+      normalizeServerString(options.server)
+    )
   }
-
-  Object.assign(
-    options,
-    normalizeServerString(options.server)
-  )
 
   if (!options.server) {
     throw new Error(`No whois server found for '${addr}'`)
