@@ -6,7 +6,7 @@ const FALLBACK_WHOIS_SERVER = 'whois.ripe.net'
 const DEFAULT_OPTIONS = {
   timeout: null,
   follow: 2,
-  host: null,
+  server: null,
   port: 43,
   query: `${QUERY_ADDR_TPL_VAR}\r\n`
 }
@@ -124,7 +124,7 @@ function getWhoisServerOptionsForAddr (addr) {
 function normalizeServerString (serverString) {
   const parts = serverString.split(':', 2)
   const serverOptions = {
-    host: parts[0]
+    server: parts[0]
   }
   if (parts.length > 1) {
     serverOptions.port = parts[1]
