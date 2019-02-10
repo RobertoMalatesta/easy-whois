@@ -1,5 +1,6 @@
 const { createConnection, isIP } = require('net')
 const servers = require('./servers')
+const registrars = require('./registrars')
 
 const QUERY_ADDR_TPL_VAR = '%{addr}'
 const FALLBACK_WHOIS_SERVER = 'whois.ripe.net'
@@ -21,12 +22,19 @@ const FIELDS_REFERRAL = [
 ]
 
 // RegExp borrowed from npm whois module
-const whoisReferralRegExp = RegExp([
+const whoisReferralServerRegExp = RegExp([
   `(?:${FIELDS_REFERRAL.join('|')})`,
   ':[^\\S\n]*',
   '(?:r?whois://)?',
   '([^\\s]*)'
 ].join(''))
+
+// RegExp to extract registrar name
+const whoisRegistrarNameRegExp = RegExp([
+  '^Registrar:\\s*',
+  '(?:\\n\\s+\\S+[^\\n]*)*?',
+  '\\n\\s+Name:\\s*([^\\n]+)\\n'
+].join(''), 'm')
 
 module.exports = easyWhois
 
@@ -140,11 +148,37 @@ function normalizeServerOptions (serverOptions) {
   return serverOptions
 }
 
-function getReferralFromResponse (response) {
+function getReferralByServer (response) {
   const match = response
     .replace(/\r/gm, '')
-    .match(whoisReferralRegExp)
+    .match(whoisReferralServerRegExp)
 
   if (!match) return
   return match[1]
+}
+
+function getReferralByName (response) {
+  const match = response
+    .replace(/\r/gm, '')
+    .match(whoisRegistrarNameRegExp)
+
+  if (!match) return
+  const name = match[1]
+  return getReferralServerByName(name)
+}
+
+function getReferralServerByName (name) {
+  return registrars[name]
+}
+
+function getReferralFromResponse (response) {
+  {
+    const server = getReferralByServer(response)
+    if (server) return server
+  }
+
+  {
+    const server = getReferralByName(response)
+    if (server) return server
+  }
 }
